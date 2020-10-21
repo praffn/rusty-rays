@@ -16,7 +16,7 @@ impl Ray {
     }
 }
 
-#[cfg(tests)]
+#[cfg(test)]
 mod tests {
     use super::*;
     use assert_approx_eq::assert_approx_eq;
@@ -25,8 +25,8 @@ mod tests {
     fn rays_can_return_points() {
         let ray = Ray::new(Vec3::new(0.0, 0.0, 0.0), Vec3::new(0.0, 1.0, 0.0));
         let p = ray.point_at_distance(5.5);
-        assert_approx_eq!(p.x, 0);
+        assert_approx_eq!(p.x, 0.0);
         assert_approx_eq!(p.y, 5.5);
-        assert_approx_eq!(p.z, 0);
+        assert_approx_eq!(p.z, 0.0);
     }
 }
