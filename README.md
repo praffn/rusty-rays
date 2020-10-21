@@ -1,3 +1,3 @@
-# <strong>Rusty Rays</strong> <small>a Rust Ray Tracer</small>
+# Rusty Rays, a Rust Ray Tracer
 
 ![Rust](https://github.com/praffn/rusty-rays/workflows/Rust/badge.svg)
