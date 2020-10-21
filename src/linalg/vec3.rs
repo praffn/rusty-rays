@@ -31,6 +31,10 @@ impl Vec3 {
             z: self.x * rhs.y - self.y * rhs.x,
         }
     }
+
+    pub fn normalize(self) -> Self {
+        self / self.length()
+    }
 }
 
 impl Add for Vec3 {
@@ -151,5 +155,14 @@ mod tests {
         assert_approx_eq!(r.x, 0.0);
         assert_approx_eq!(r.y, 0.0);
         assert_approx_eq!(r.z, 1.0);
+    }
+
+    #[test]
+    fn a_vector_can_be_normalized() {
+        let v = Vec3::new(2.0, -4.5, 10.0);
+        let r = v.normalize();
+        assert_approx_eq!(r.x, 0.1794245216);
+        assert_approx_eq!(r.y, -0.4037051736);
+        assert_approx_eq!(r.z, 0.897122608);
     }
 }
