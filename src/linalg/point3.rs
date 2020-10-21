@@ -9,7 +9,7 @@ pub struct Point3 {
 }
 
 impl Point3 {
-    pub fn new(x: f32, z: f32, y: f32) -> Self {
+    pub fn new(x: f32, y: f32, z: f32) -> Self {
         Self { x, y, z }
     }
 
@@ -46,7 +46,7 @@ impl Sub for Point3 {
     }
 }
 
-#[cfg(tests)]
+#[cfg(test)]
 mod tests {
     use super::*;
     use assert_approx_eq::assert_approx_eq;
@@ -57,7 +57,7 @@ mod tests {
         let q = Point3::new(-4.0, 5.0, -6.0);
         let d = p.distance_to(q);
         assert_approx_eq!(d.x, -5.0);
-        assert_approx_eq!(d.y, 3.0);
+        assert_approx_eq!(d.y, 7.0);
         assert_approx_eq!(d.z, -9.0);
     }
 
@@ -68,6 +68,6 @@ mod tests {
         let q = p.displace(v);
         assert_approx_eq!(q.x, 1.5);
         assert_approx_eq!(q.y, -3.5);
-        assert_approx_eq!(q.z, -2.5);
+        assert_approx_eq!(q.z, -1.5);
     }
 }
