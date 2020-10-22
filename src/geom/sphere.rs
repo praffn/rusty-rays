@@ -57,4 +57,15 @@ mod tests {
         let hit_info = hit.unwrap();
         assert_approx_eq!(hit_info.distance, 1.0);
     }
+
+    #[test]
+    fn a_ray_intersecting_a_sphere_from_behind_will_return_none() {
+        let sphere = Sphere {
+            center: Point3::new(0.0, 2.0, 0.0),
+            radius: 1.0,
+        };
+        let ray = Ray::new(Point3::new(0.0, 0.0, 0.0), Vec3::new(0.0, -1.0, 0.0));
+        let hit = sphere.hit(&ray);
+        assert_eq!(hit.is_none(), true);
+    }
 }
