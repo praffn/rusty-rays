@@ -18,7 +18,10 @@ fn main() {
         .harmonize_dimensions(1.0)
         .build();
 
-    let sphere = geom::Sphere::new(linalg::Point3::new(0.0, 0.0, 0.0), 1.0);
+    let sphere_a = geom::Sphere::new(linalg::Point3::new(0.0, 0.0, 0.0), 1.0);
+    let sphere_b = geom::Sphere::new(linalg::Point3::new(1.5, 0.0, 0.0), 0.2);
+
+    let shapes = vec![sphere_a, sphere_b];
 
     let mut imgbuf = image::ImageBuffer::new(image_width, image_height);
 
@@ -29,7 +32,7 @@ fn main() {
             let rays = camera.get_rays_for_coordinate(x, y);
             let len = rays.len();
             for ray in rays {
-                match sphere.hit(&ray) {
+                match shapes.hit(&ray) {
                     None => {}
                     Some(_) => {
                         color = color + film::Color::new(0.9921568627, 0.4745098039, 0.6588235294)
