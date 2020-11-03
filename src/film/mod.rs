@@ -1,6 +1,7 @@
 use crate::linalg::Ray;
 
 mod color;
+pub mod light;
 
 pub trait Camera {
     fn get_rays_for_coordinate(&self, x: u32, y: u32) -> Vec<Ray>;
