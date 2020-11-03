@@ -6,6 +6,12 @@ pub struct Sphere {
     radius: f32,
 }
 
+impl Sphere {
+    pub fn new(center: Point3, radius: f32) -> Self {
+        Self { center, radius }
+    }
+}
+
 impl Shape for Sphere {
     fn hit(&self, ray: &Ray) -> Option<HitInfo> {
         let oc = ray.origin - self.center;
