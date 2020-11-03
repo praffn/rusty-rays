@@ -30,6 +30,16 @@ impl Color {
         Self { r, g, b }
     }
 
+    pub fn normalize(self) -> Self {
+        let squared_length = self.r * self.r + self.g + self.g + self.b * self.b;
+        if squared_length == 0.0 {
+            self
+        } else {
+            let length = squared_length.sqrt();
+            self * (1.0 / length)
+        }
+    }
+
     pub fn clamp(self) -> Self {
         Self {
             r: clamp(self.r),
@@ -52,9 +62,9 @@ impl Color {
         }
     }
 
-    pub fn to_rgb(self) -> (u8, u8, u8) {
+    pub fn to_rgb(self) -> [u8; 3] {
         let c = self * 255.0;
-        (c.r as u8, c.g as u8, c.b as u8)
+        [c.r as u8, c.g as u8, c.b as u8]
     }
 }
 
@@ -111,7 +121,7 @@ mod tests {
     #[test]
     fn color_can_compute_rgb_u8s() {
         let c = Color::new(0.0, 0.5, 1.0);
-        let (r, g, b) = c.to_rgb();
+        let [r, g, b] = c.to_rgb();
         assert_eq!(r, 0);
         assert_eq!(g, 127);
         assert_eq!(b, 255);

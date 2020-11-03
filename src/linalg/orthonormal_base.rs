@@ -15,8 +15,17 @@ impl OrthonormalBase {
         Self { u, v, w }
     }
 
-    pub fn apply_vector(self, v: Vec3) -> Vec3 {
+    pub fn apply(&self, x: f32, y: f32, z: f32) -> Vec3 {
+        self.u * x + self.v * y + self.w * z
+    }
+
+    pub fn apply_vector(&self, v: Vec3) -> Vec3 {
         self.u * v.x + self.v * v.y + self.w * v.z
+    }
+
+    pub fn apply_point(&self, p: Point3) -> Point3 {
+        let v = self.u * p.x + self.v * p.y + self.w * p.z;
+        Point3::new(v.x, v.y, v.z)
     }
 }
 
