@@ -188,7 +188,7 @@ mod tests {
         let c = Color::new(0.0, 0.5, 1.0);
         let [r, g, b] = c.to_rgb();
         assert_eq!(r, 0);
-        assert_eq!(g, 127);
-        assert_eq!(b, 255);
+        assert_eq!(g, 177);
+        assert_eq!(b, 242);
     }
 }

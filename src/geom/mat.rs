@@ -52,3 +52,21 @@ impl Material for DiffuseMaterial {
         base_color
     }
 }
+
+pub struct DebugMaterial {}
+
+impl DebugMaterial {
+    pub fn new() -> DebugMaterial {
+        DebugMaterial {}
+    }
+}
+
+impl Material for DebugMaterial {
+    fn shade(&self, _: &HitInfo, _: &Scene) -> Color {
+        Color {
+            r: 1.0,
+            g: 1e-6,
+            b: 1.0,
+        }
+    }
+}

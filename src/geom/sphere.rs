@@ -1,5 +1,5 @@
 use super::{HitInfo, Shape};
-use crate::geom::Material;
+use crate::geom::{mat, Material};
 use crate::linalg::{smallest_greater_than_zero, solve_quadratic, Point3, Ray, Vec3};
 
 pub struct Sphere {
@@ -53,6 +53,7 @@ mod tests {
         let sphere = Sphere {
             center: Point3::new(3.0, 2.0, 0.0),
             radius: 1.0,
+            material: Box::new(mat::DebugMaterial::new()),
         };
         let ray = Ray::new(Point3::new(0.0, 0.0, 0.0), Vec3::new(0.0, 1.0, 0.0));
         let hit = sphere.hit(&ray);
@@ -64,6 +65,7 @@ mod tests {
         let sphere = Sphere {
             center: Point3::new(0.0, 2.0, 0.0),
             radius: 1.0,
+            material: Box::new(mat::DebugMaterial::new()),
         };
         let ray = Ray::new(Point3::new(0.0, 0.0, 0.0), Vec3::new(0.0, 1.0, 0.0));
         let hit = sphere.hit(&ray);
@@ -77,6 +79,7 @@ mod tests {
         let sphere = Sphere {
             center: Point3::new(0.0, 2.0, 0.0),
             radius: 1.0,
+            material: Box::new(mat::DebugMaterial::new()),
         };
         let ray = Ray::new(Point3::new(0.0, 0.0, 0.0), Vec3::new(0.0, -1.0, 0.0));
         let hit = sphere.hit(&ray);
