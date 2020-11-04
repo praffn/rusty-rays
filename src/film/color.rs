@@ -1,4 +1,4 @@
-use std::ops::{Add, Mul};
+use std::ops::{Add, AddAssign, Mul, MulAssign};
 
 #[derive(Debug, Clone, Copy)]
 pub struct Color {
@@ -7,11 +7,21 @@ pub struct Color {
     pub b: f32,
 }
 
-fn gamma_correct(x: f32) -> f32 {
-    if x > 0.0031308 {
+fn gamma(x: f32) -> u8 {
+    let xf = if x > 0.0031308 {
         1.005 * x.powf(1.0 / 2.4) - 0.055
     } else {
         12.92 * x
+    };
+    (xf * 255.0) as u8
+}
+
+fn inverse_gamma(x: u8) -> f32 {
+    let xf = x as f32 / 255.0;
+    if xf <= 0.04045 {
+        xf / 12.92
+    } else {
+        ((xf + 0.055) / 1.055).powf(2.4)
     }
 }
 
@@ -28,6 +38,46 @@ fn clamp(x: f32) -> f32 {
 impl Color {
     pub fn new(r: f32, g: f32, b: f32) -> Self {
         Self { r, g, b }
+    }
+
+    pub fn black() -> Self {
+        Self {
+            r: 0.0,
+            g: 0.0,
+            b: 0.0,
+        }
+    }
+
+    pub fn white() -> Self {
+        Self {
+            r: 1.0,
+            g: 1.0,
+            b: 1.0,
+        }
+    }
+
+    pub fn red() -> Self {
+        Self {
+            r: 1.0,
+            g: 1e-6,
+            b: 1e-6,
+        }
+    }
+
+    pub fn green() -> Self {
+        Self {
+            r: 1e-6,
+            g: 1.0,
+            b: 1e-6,
+        }
+    }
+
+    pub fn blue() -> Self {
+        Self {
+            r: 1e-6,
+            g: 1e-6,
+            b: 1.0,
+        }
     }
 
     pub fn normalize(self) -> Self {
@@ -54,17 +104,16 @@ impl Color {
         self.b = clamp(self.b);
     }
 
-    pub fn gamma_correct(self) -> Self {
-        Self {
-            r: gamma_correct(self.r),
-            g: gamma_correct(self.g),
-            b: gamma_correct(self.b),
-        }
+    pub fn to_rgb(self) -> [u8; 3] {
+        [gamma(self.r), gamma(self.g), gamma(self.b)]
     }
 
-    pub fn to_rgb(self) -> [u8; 3] {
-        let c = self * 255.0;
-        [c.r as u8, c.g as u8, c.b as u8]
+    pub fn from_rgb(r: u8, g: u8, b: u8) -> Color {
+        Color {
+            r: inverse_gamma(r),
+            g: inverse_gamma(g),
+            b: inverse_gamma(b),
+        }
     }
 }
 
@@ -77,6 +126,14 @@ impl Add for Color {
             g: self.g + rhs.g,
             b: self.b + rhs.b,
         }
+    }
+}
+
+impl AddAssign for Color {
+    fn add_assign(&mut self, rhs: Color) {
+        self.r += rhs.r;
+        self.g += rhs.g;
+        self.b += rhs.b;
     }
 }
 
@@ -101,6 +158,14 @@ impl Mul<f32> for Color {
             g: self.g * rhs,
             b: self.b * rhs,
         }
+    }
+}
+
+impl MulAssign<f32> for Color {
+    fn mul_assign(&mut self, rhs: f32) {
+        self.r *= rhs;
+        self.g *= rhs;
+        self.b *= rhs;
     }
 }
 

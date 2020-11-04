@@ -1,14 +1,20 @@
 use super::{HitInfo, Shape};
+use crate::geom::Material;
 use crate::linalg::{smallest_greater_than_zero, solve_quadratic, Point3, Ray, Vec3};
 
 pub struct Sphere {
     center: Point3,
     radius: f32,
+    material: Box<dyn Material>,
 }
 
 impl Sphere {
-    pub fn new(center: Point3, radius: f32) -> Self {
-        Self { center, radius }
+    pub fn new(center: Point3, radius: f32, material: Box<dyn Material>) -> Self {
+        Self {
+            center,
+            radius,
+            material: material,
+        }
     }
 }
 
@@ -23,11 +29,13 @@ impl Shape for Sphere {
             Some((t0, t1)) => match smallest_greater_than_zero(t0, t1) {
                 None => None,
                 Some(t) => {
-                    let hitpoint = ray.point_at_distance(t).to_vec3();
-                    let normal = hitpoint * (1.0 / self.radius);
+                    let hit_point = ray.point_at_distance(t);
+                    let normal = hit_point.to_vec3() * (1.0 / self.radius);
                     Some(HitInfo {
                         distance: t,
                         normal,
+                        hit_point,
+                        material: &self.material,
                     })
                 }
             },
