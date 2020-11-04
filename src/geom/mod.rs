@@ -1,9 +1,16 @@
-use crate::linalg::{Ray, Vec3};
+use crate::geom::mat::Material;
+use crate::linalg::{Point3, Ray, Vec3};
 
-pub struct HitInfo {
+pub mod mat;
+mod scene;
+
+pub use scene::Scene;
+
+pub struct HitInfo<'a> {
     pub distance: f32,
     pub normal: Vec3,
-    // pub material: ?,
+    pub hit_point: Point3,
+    pub material: &'a Box<dyn Material>,
 }
 
 pub trait Shape {
