@@ -14,7 +14,7 @@ impl Scene {
     pub fn trace(&self, ray: &Ray) -> Color {
         match self.shape.hit(ray) {
             None => Color::black(),
-            Some(hit_info) => hit_info.material.shade(&hit_info, self),
+            Some(hit_info) => hit_info.material.shade(&ray, &hit_info, self),
         }
     }
 }
