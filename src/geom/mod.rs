@@ -17,7 +17,7 @@ pub trait Shape {
     fn hit(&self, ray: &Ray) -> Option<HitInfo>;
 }
 
-impl Shape for Vec<Sphere> {
+impl Shape for Vec<Box<dyn Shape>> {
     fn hit(&self, ray: &Ray) -> Option<HitInfo> {
         let mut hit: Option<HitInfo> = None;
         for shape in self {

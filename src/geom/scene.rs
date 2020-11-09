@@ -1,6 +1,6 @@
 use super::mat::Material;
-use crate::film::light::Light;
 use crate::film::Color;
+use crate::light::Light;
 use crate::linalg::Ray;
 use crate::Shape;
 

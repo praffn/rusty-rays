@@ -2,6 +2,7 @@ extern crate image;
 
 mod film;
 mod geom;
+mod light;
 mod linalg;
 
 use film::Camera;
@@ -11,7 +12,7 @@ fn main() {
     let image_width = 256;
     let image_height = 256;
 
-    let ambient_light = film::light::AmbientLight::new(film::Color::white(), 0.8);
+    let ambient_light = light::AmbientLight::new(film::Color::white(), 0.8);
 
     let mat_a = geom::mat::DiffuseMaterial::new(1.0, film::Color::blue(), 1.0, film::Color::blue());
 
@@ -20,10 +21,10 @@ fn main() {
     let sphere_a = geom::Sphere::new(linalg::Point3::new(0.0, 0.0, 0.0), 1.0, Box::new(mat_a));
     let sphere_b = geom::Sphere::new(linalg::Point3::new(0.0, -0.5, -1.5), 0.2, Box::new(mat_b));
 
-    let shapes = vec![sphere_a, sphere_b];
+    let shapes: Vec<Box<dyn Shape>> = vec![Box::new(sphere_a), Box::new(sphere_b)];
 
     let scene = geom::Scene {
-        lights: vec![Box::new(film::light::PointLight::new(
+        lights: vec![Box::new(light::PointLight::new(
             linalg::Point3::new(3.0, 3.0, -3.0),
             film::Color::from_rgb(255, 255, 255),
             1.0,

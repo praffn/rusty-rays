@@ -1,14 +1,7 @@
+use super::Light;
 use crate::film::Color;
 use crate::linalg::{Point3, Ray, Vec3};
 use crate::Shape;
-
-pub trait Light {
-    fn color(&self) -> Color;
-    fn direction_from_point(&self, p: Point3) -> Vec3;
-    fn illuminates_point(&self, p: Point3, shape: &dyn Shape) -> bool;
-    fn geometric_factor(&self) -> f32;
-    fn probability_density(&self) -> f32;
-}
 
 pub struct PointLight {
     position: Point3,
@@ -61,42 +54,33 @@ impl Light for PointLight {
     }
 }
 
-pub struct AmbientLight {
-    color: Color,
-    intensity: f32,
-}
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use crate::geom::{mat, Sphere};
+    use assert_approx_eq::assert_approx_eq;
 
-impl AmbientLight {
-    pub fn new(color: Color, intensity: f32) -> Self {
-        let intensity = if intensity < 0.0 {
-            0.0
-        } else if intensity > 1.0 {
-            1.0
-        } else {
-            intensity
-        };
-        Self { color, intensity }
-    }
-}
-
-impl Light for AmbientLight {
-    fn color(&self) -> Color {
-        return self.color * self.intensity;
+    fn generate_shapes() -> Vec<Box<dyn Shape>> {
+        vec![Box::new(Sphere::new(
+            Point3::new(0.0, 1.0, 0.0),
+            0.5,
+            Box::new(mat::DebugMaterial::new()),
+        ))]
     }
 
-    fn direction_from_point(&self, _: Point3) -> Vec3 {
-        Vec3::zero()
+    #[test]
+    fn pointlight_illuminates_point_with_no_obstruction() {
+        let shapes = generate_shapes();
+        let light = PointLight::new(Point3::new(0.0, 0.0, 0.0), Color::red(), 0.5);
+        let illuminates = light.illuminates_point(Point3::new(0.0, -1.0, 0.0), &shapes);
+        assert_eq!(illuminates, true);
     }
 
-    fn illuminates_point(&self, _: Point3, _: &dyn Shape) -> bool {
-        true
-    }
-
-    fn geometric_factor(&self) -> f32 {
-        1.0
-    }
-
-    fn probability_density(&self) -> f32 {
-        1.0
+    #[test]
+    fn pointlight_does_not_illuminate_point_with_obstruction() {
+        let shapes = generate_shapes();
+        let light = PointLight::new(Point3::new(0.0, 0.0, 0.0), Color::red(), 0.5);
+        let illuminates = light.illuminates_point(Point3::new(0.0, 2.0, 0.0), &shapes);
+        assert_eq!(illuminates, false);
     }
 }
