@@ -85,4 +85,18 @@ mod tests {
         let hit = sphere.hit(&ray);
         assert_eq!(hit.is_none(), true);
     }
+
+    #[test]
+    fn a_ray_inside_a_sphere_will_return_hit_info() {
+        let sphere = Sphere {
+            center: Point3::new(0.0, 0.0, 0.0),
+            radius: 1.0,
+            material: Box::new(mat::DebugMaterial::new()),
+        };
+        let ray = Ray::new(Point3::new(0.0, 0.0, 0.0), Vec3::new(0.0, 0.0, 1.0));
+        let hit = sphere.hit(&ray);
+        assert_eq!(hit.is_some(), true);
+        let hit_info = hit.unwrap();
+        assert_approx_eq!(hit_info.distance, 1.0);
+    }
 }
